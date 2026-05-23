@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Keksgames-Server-Modpack-Creator"
+version = "0.1.0"
+description = "A friendly TUI for turning a Minecraft launcher mods folder into a server-side modpack."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "textual>=0.80.0,<1.0.0",
+    "rich>=13.7.0,<15.0.0",
+]
+
+[project.scripts]
+mc-server-pack = "mc_server_pack_creator.__main__:main"
+
+[tool.setuptools]
+packages = ["mc_server_pack_creator"]
+
+[tool.setuptools.package-dir]
+mc_server_pack_creator = "Keksgames-Server-Modpack-Creator"
