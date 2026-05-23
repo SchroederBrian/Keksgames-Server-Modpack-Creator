@@ -39,7 +39,7 @@ Klone dieses Repository und installiere es im editierbaren Modus:
 
 ```powershell
 # Repository klonen (oder herunterladen)
-git clone https://github.com/dein-username/Keksgames-Server-Modpack-Creator.git
+git clone https://github.com/SchroederBrian/Keksgames-Server-Modpack-Creator.git
 cd Keksgames-Server-Modpack-Creator
 
 # Paket editierbar installieren
