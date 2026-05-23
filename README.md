@@ -1,3 +1,5 @@
+![Preview](/images/preview.png)
+
 # 🎮 Keksgames Server Modpack Creator
 
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
