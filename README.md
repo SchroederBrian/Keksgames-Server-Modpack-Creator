@@ -70,9 +70,6 @@ Ohne diesen API-Key können keine automatischen CurseForge-Fingerprints abgeglic
 ```powershell
 # Windows (PowerShell)
 $env:CURSEFORGE_API_KEY="dein-api-key"
-
-# Linux / macOS
-export CURSEFORGE_API_KEY="dein-api-key"
 ```
 
 ### 2. Parallelisierungs-Worker (`MC_SERVER_PACK_SCAN_WORKERS`)
@@ -80,9 +77,6 @@ Bestimmt, wie viele Mod-Dateien parallel analysiert und geastht werden sollen. S
 ```powershell
 # Windows (PowerShell)
 $env:MC_SERVER_PACK_SCAN_WORKERS="12"
-
-# Linux / macOS
-export MC_SERVER_PACK_SCAN_WORKERS="12"
 ```
 
 ---
