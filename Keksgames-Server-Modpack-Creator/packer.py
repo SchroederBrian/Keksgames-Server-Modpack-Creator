@@ -5,24 +5,8 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .config import config
 from .models import ModCandidate
-
-SERVER_SIDE_DIRS = [
-    "config",
-    "defaultconfigs",
-    "kubejs",
-    "scripts",
-    "datapacks",
-    "openloader",
-    "configureddefaults",
-    "patchouli_books",
-]
-
-SERVER_SIDE_FILES = [
-    "server.properties",
-    "allowlist.json",
-    "whitelist.json",
-]
 
 
 def create_server_pack(source_mod_folder: Path, output_folder: Path, candidates: list[ModCandidate]) -> Path:
@@ -38,7 +22,7 @@ def create_server_pack(source_mod_folder: Path, output_folder: Path, candidates:
 
     instance_root = source_mod_folder.parent
     copied_paths: list[str] = []
-    for dirname in SERVER_SIDE_DIRS:
+    for dirname in config.server_side_dirs:
         source = instance_root / dirname
         if source.is_dir():
             destination = output_folder / dirname
@@ -47,7 +31,7 @@ def create_server_pack(source_mod_folder: Path, output_folder: Path, candidates:
             shutil.copytree(source, destination)
             copied_paths.append(dirname)
 
-    for filename in SERVER_SIDE_FILES:
+    for filename in config.server_side_files:
         source = instance_root / filename
         if source.is_file():
             shutil.copy2(source, output_folder / filename)
@@ -74,20 +58,20 @@ def _write_manifest(
         "mods": [candidate.as_report_row() for candidate in candidates],
     }
     (output_folder / "server-pack-report.json").write_text(
-        json.dumps(manifest, indent=2, ensure_ascii=False),
+        json.dumps(manifest, indent=2, ensure_ascii=True),
         encoding="utf-8",
+        errors="backslashreplace",
     )
 
 
 def _write_start_scripts(output_folder: Path) -> None:
+    cmd = config.start_command.format(xms=config.default_xms, xmx=config.default_xmx)
     (output_folder / "start-server.ps1").write_text(
-        "$ErrorActionPreference = 'Stop'\n"
-        "java -Xms2G -Xmx6G -jar server.jar nogui\n",
+        f"$ErrorActionPreference = 'Stop'\n{cmd}\n",
         encoding="utf-8",
     )
     (output_folder / "start-server.sh").write_text(
-        "#!/usr/bin/env sh\n"
-        "java -Xms2G -Xmx6G -jar server.jar nogui\n",
+        f"#!/usr/bin/env sh\n{cmd}\n",
         encoding="utf-8",
     )
 
@@ -108,4 +92,8 @@ def _write_readme(output_folder: Path, candidates: list[ModCandidate], copied_pa
         "",
         "Details stehen in `server-pack-report.json`.",
     ]
-    (output_folder / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (output_folder / "README.md").write_text(
+        "\n".join(lines) + "\n",
+        encoding="utf-8",
+        errors="backslashreplace",
+    )

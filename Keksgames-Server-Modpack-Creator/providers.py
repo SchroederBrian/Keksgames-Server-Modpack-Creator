@@ -8,11 +8,9 @@ import urllib.request
 from collections.abc import Iterable
 from typing import Any, TypeVar
 
+from .config import config
 from .models import ModCandidate
 
-USER_AGENT = "mc-server-pack-creator/0.1.0"
-MODRINTH_API = "https://api.modrinth.com/v2"
-CURSEFORGE_API = "https://api.curseforge.com/v1"
 T = TypeVar("T")
 
 
@@ -21,11 +19,11 @@ class ApiError(RuntimeError):
 
 
 def lookup_modrinth(candidate: ModCandidate) -> None:
-    version = _json_get(f"{MODRINTH_API}/version_file/{candidate.sha1}?algorithm=sha1")
+    version = _json_get(f"{config.modrinth_api}/version_file/{candidate.sha1}?algorithm=sha1")
     if not version:
         return
 
-    project = _json_get(f"{MODRINTH_API}/project/{version['project_id']}") or {}
+    project = _json_get(f"{config.modrinth_api}/project/{version['project_id']}") or {}
     _apply_modrinth_match(candidate, version, project)
 
 
@@ -38,7 +36,7 @@ def lookup_modrinth_many(candidates: Iterable[ModCandidate], batch_size: int = 1
     versions_by_hash: dict[str, dict[str, Any]] = {}
     for sha1_batch in _chunks(list(candidates_by_sha1), batch_size):
         data = _json_request(
-            f"{MODRINTH_API}/version_files",
+            f"{config.modrinth_api}/version_files",
             method="POST",
             body={"hashes": sha1_batch, "algorithm": "sha1"},
         )
@@ -87,7 +85,7 @@ def _lookup_modrinth_projects(project_ids: set[str], batch_size: int) -> dict[st
     projects_by_id: dict[str, dict[str, Any]] = {}
     for project_batch in _chunks(sorted(project_ids), batch_size):
         query = urllib.parse.urlencode({"ids": json.dumps(project_batch)})
-        data = _json_get(f"{MODRINTH_API}/projects?{query}") or []
+        data = _json_get(f"{config.modrinth_api}/projects?{query}") or []
         if isinstance(data, list):
             projects_by_id.update(
                 {
@@ -100,7 +98,7 @@ def _lookup_modrinth_projects(project_ids: set[str], batch_size: int) -> dict[st
 
 
 def lookup_curseforge(candidates: Iterable[ModCandidate], api_key: str | None = None) -> None:
-    key = api_key or os.getenv("CURSEFORGE_API_KEY")
+    key = api_key or config.curseforge_api_key
     if not key:
         for candidate in candidates:
             _set_search_link(candidate, "CurseForge API-Key fehlt; bitte manuell entscheiden.")
@@ -112,7 +110,7 @@ def lookup_curseforge(candidates: Iterable[ModCandidate], api_key: str | None = 
 
     body = {"fingerprints": list(candidates_by_fp)}
     data = _json_request(
-        f"{CURSEFORGE_API}/fingerprints",
+        f"{config.curseforge_api}/fingerprints",
         method="POST",
         body=body,
         headers={"x-api-key": key},
@@ -178,7 +176,7 @@ def _curseforge_mods(mod_ids: set[int], api_key: str) -> dict[int, dict[str, Any
     if not mod_ids:
         return {}
     data = _json_request(
-        f"{CURSEFORGE_API}/mods",
+        f"{config.curseforge_api}/mods",
         method="POST",
         body={"modIds": sorted(mod_ids)},
         headers={"x-api-key": api_key},
@@ -216,7 +214,7 @@ def _json_request(
 ) -> Any:
     request_headers = {
         "Accept": "application/json",
-        "User-Agent": USER_AGENT,
+        "User-Agent": config.user_agent,
         **(headers or {}),
     }
     data = None

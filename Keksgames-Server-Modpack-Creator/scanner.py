@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .hashes import curseforge_fingerprint, sha1_file
 from .jar_meta import read_jar_metadata
+from .config import config
 from .models import ModCandidate
 from .providers import ApiError, lookup_curseforge, lookup_modrinth, lookup_modrinth_many
 
@@ -91,8 +92,5 @@ def _lookup_modrinth_individually(
 def _worker_count(item_count: int, configured: int | None) -> int:
     if item_count <= 0:
         return 1
-    try:
-        raw = configured or int(os.getenv("MC_SERVER_PACK_SCAN_WORKERS", "8"))
-    except ValueError:
-        raw = 8
+    raw = configured or config.scan_workers
     return max(1, min(raw, item_count))

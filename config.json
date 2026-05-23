@@ -1,0 +1,25 @@
+{
+  "CURSEFORGE_API_KEY": "",
+  "MC_SERVER_PACK_SCAN_WORKERS": 8,
+  "SERVER_SIDE_DIRS": [
+    "config",
+    "defaultconfigs",
+    "kubejs",
+    "scripts",
+    "datapacks",
+    "openloader",
+    "configureddefaults",
+    "patchouli_books"
+  ],
+  "SERVER_SIDE_FILES": [
+    "server.properties",
+    "allowlist.json",
+    "whitelist.json"
+  ],
+  "USER_AGENT": "Keksgames-Server-Modpack-Creator/0.1.0",
+  "MODRINTH_API": "https://api.modrinth.com/v2",
+  "CURSEFORGE_API": "https://api.curseforge.com/v1",
+  "DEFAULT_XMS": "2G",
+  "DEFAULT_XMX": "6G",
+  "START_COMMAND": "java -Xms{xms} -Xmx{xmx} -jar server.jar nogui"
+}

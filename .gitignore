@@ -1,3 +1,5 @@
-/mc_server_pack_creator/__pycache__
 /Keksgames-Server-Modpack-Creator/__pycache__
 /Keksgames_Server_Modpack_Creator.egg-info
+/node_modules
+/package-lock.json
+/server-pack*
