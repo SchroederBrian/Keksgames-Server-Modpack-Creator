@@ -132,6 +132,6 @@ Keksgames-Server-Modpack-Creator/
 
 ## 📜 Lizenz
 
-Dieses Projekt ist unter der **MIT-Lizenz** lizenziert. Siehe die Datei `LICENSE` für Details (oder nutze es frei nach den Richtlinien der MIT-Lizenz).
+Dieses Projekt ist unter der **MIT-Lizenz** lizenziert.
 
 Erstellt mit ❤️ für die Minecraft Community.
